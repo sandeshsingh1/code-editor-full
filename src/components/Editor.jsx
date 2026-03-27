@@ -10,7 +10,6 @@ const CodeEditor = () => {
 const runCode = async () => {
   setLoading(true);
   setOutput("Running...");
-
   try {
     const res = await axios.post("http://localhost:5000/run", {
       code,
