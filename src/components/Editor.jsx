@@ -83,5 +83,4 @@ const runCode = async () => {
     </div>
   );
 };
-
 export default CodeEditor;
