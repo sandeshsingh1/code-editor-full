@@ -7,7 +7,6 @@ const Home = () => {
       <div className="w-1/2 border-r border-gray-700 overflow-y-auto">
         <Problem />
       </div>
-
       {/* Right Panel */}
       <div className="w-1/2">
         <CodeEditor />
@@ -15,5 +14,4 @@ const Home = () => {
     </div>
   );
 };
-
 export default Home;
