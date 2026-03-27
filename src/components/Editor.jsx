@@ -8,15 +8,26 @@ const CodeEditor = () => {
   const [output, setOutput] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const runCode = () => {
-    setLoading(true);
+const runCode = async () => {
+  setLoading(true);
 
-    // simulate delay (like backend call)
-    setTimeout(() => {
-      setOutput("Output:\n(backend not connected yet)");
-      setLoading(false);
-    }, 800);
-  };
+  try {
+    const res = await fetch("http://localhost:5000/run", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ code }),
+    });
+
+    const data = await res.json();
+    setOutput(data.output);
+  } catch (err) {
+    setOutput("Error connecting to server");
+  }
+
+  setLoading(false);
+};
 
   return (
     <div className="h-screen flex flex-col bg-black">
