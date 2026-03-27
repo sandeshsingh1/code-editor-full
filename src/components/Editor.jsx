@@ -1,34 +1,30 @@
 import { useState } from "react";
 import Editor from "@monaco-editor/react";
-
+import axios from "axios"
 const CodeEditor = () => {
   const [language, setLanguage] = useState("cpp");
   const [code, setCode] = useState(`// Write your code here`);
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [loading, setLoading] = useState(false);
-
 const runCode = async () => {
   setLoading(true);
+  setOutput("Running...");
 
   try {
-    const res = await fetch("http://localhost:5000/run", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ code }),
+    const res = await axios.post("http://localhost:5000/run", {
+      code,
+      language,
+      input,
     });
-
-    const data = await res.json();
-    setOutput(data.output);
+    setOutput(res.data.output);
   } catch (err) {
-    setOutput("Error connecting to server");
+    setOutput(
+      err.response?.data?.output || "Error connecting to server"
+    );
   }
-
   setLoading(false);
 };
-
   return (
     <div className="h-screen flex flex-col bg-black">
 
