@@ -23,7 +23,7 @@ const ProblemPage = () => {
       </div>
       {/* RIGHT - Editor */}
       <div className="w-1/2">
-        <CodeEditor />
+        <CodeEditor problemId={problem._id} />
       </div>
     </div>
   );

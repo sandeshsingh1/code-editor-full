@@ -1,28 +1,25 @@
 import { useState } from "react";
 import Editor from "@monaco-editor/react";
 import axios from "axios"
-const CodeEditor = () => {
+const CodeEditor = ({problemId}) => {
   const [language, setLanguage] = useState("cpp");
   const [code, setCode] = useState(`// Write your code here`);
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [loading, setLoading] = useState(false);
 const runCode = async () => {
-  setLoading(true);
-  setOutput("Running...");
   try {
     const res = await axios.post("http://localhost:5000/run", {
       code,
       language,
-      input,
+      problemId,
     });
-    setOutput(res.data.output);
+    console.log("Response:", res.data);
+    setOutput(JSON.stringify(res.data, null, 2));
   } catch (err) {
-    setOutput(
-      err.response?.data?.output || "Error connecting to server"
-    );
+    console.error(err);
+    setOutput("Error running code");
   }
-  setLoading(false);
 };
   return (
     <div className="h-screen flex flex-col bg-black">
@@ -40,7 +37,6 @@ const runCode = async () => {
           <option value="javascript">JavaScript</option>
           <option value="python">Python</option>
         </select>
-
         {/* Run Button */}
         <button
           onClick={runCode}
@@ -49,7 +45,6 @@ const runCode = async () => {
           {loading ? "Running..." : "Run Code"}
         </button>
       </div>
-
       {/* 🔹 Editor (flex-1 FIX) */}
       <div className="flex-1">
         <Editor
@@ -60,7 +55,6 @@ const runCode = async () => {
           theme="vs-dark"
         />
       </div>
-
       {/* 🔹 Input Box */}
       <div className="p-2 bg-gray-900 border-t border-gray-700">
         <p className="text-white mb-1 text-sm">Input</p>
@@ -71,7 +65,6 @@ const runCode = async () => {
           placeholder="Custom input..."
         />
       </div>
-
       {/* 🔹 Output Console */}
       <div className="p-2 bg-black border-t border-gray-700">
         <p className="text-white mb-1 text-sm">Output</p>
@@ -79,7 +72,6 @@ const runCode = async () => {
           {output || "No output yet..."}
         </div>
       </div>
-
     </div>
   );
 };
